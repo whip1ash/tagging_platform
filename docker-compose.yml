@@ -4,7 +4,11 @@ services:
         # 指定版本5.7
         image: mysql:5.7
         container_name: mysql-db # 容器名
-        command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+        command: [
+          "--character-set-server=utf8mb4",
+          "--collation-server=utf8mb4_unicode_ci"
+          "--init-file=resource/init.sql"
+        ]
         restart: always
         environment:
           MYSQL_ROOT_PASSWORD: tagging-platform #root管理员用户密码
