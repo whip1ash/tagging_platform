@@ -38,3 +38,9 @@ $ ./bin/import_wiki_data.py <filepath>
 # This step will overwrite data in normal_sentence table, please backup if it's important.
 $ mysql -uroot -p<your_database_password> -P 6606 -h127.0.0.1 -D tag < ./resource/normal_sentence.sql
 ```
+
+## Usage
+```
+$ cd src/
+$ ./bin/run-dev.sh
+```
