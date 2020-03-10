@@ -99,7 +99,7 @@ def import_sentence2database(data):
 if __name__ == '__main__':
 
     if len(sys.argv) < 2:
-        path = "/Users/Whip1ash/Code/KM/Wikipedia_Spider/output.json"
+        path = "./output.json"
     else:
         path = sys.argv[1]
 

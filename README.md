@@ -20,9 +20,18 @@ $ cd src
 
 # create table structure
 $ ./bin/django-migrate.sh
-
-
-
 ```
 
 ### Import Data
+#### Import Data from WikipediaSpider result
+
+```
+# <filepath> is the location of WikipediaSpider result 
+# Default is ./output.json
+$ ./bin/import_wiki_data.py <filepath>
+```
+
+#### Import Data from SQL execute file
+```
+
+```
