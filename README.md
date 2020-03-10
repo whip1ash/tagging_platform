@@ -16,6 +16,11 @@ $ sudo docker-compose up -d
 
 $ pip3 install -r requirements.txt
 
+$ cd src
+
+# create table structure
+$ ./bin/django-migrate.sh
+
 
 
 ```
