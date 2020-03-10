@@ -1,0 +1,20 @@
+version: '3'
+services:
+    db:
+        # 指定版本5.7
+        image: mysql:5.7
+        container_name: mysql-db # 容器名
+        command: [
+          "--character-set-server=utf8mb4",
+          "--collation-server=utf8mb4_unicode_ci"
+        ]
+        restart: always
+        environment:
+          # todo: 去掉默认密码
+          MYSQL_ROOT_PASSWORD: tagging-platform #root管理员用户密码
+          MYSQL_USER: user   #创建test用户
+          MYSQL_PASSWORD: test  #设置test用户的密码
+        ports:
+          - '6606:3306'  #host物理直接映射端口为6606
+        volumes:
+          - './resource:/docker-entrypoint-initdb.d'
