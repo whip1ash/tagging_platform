@@ -37,11 +37,16 @@ def tag_history(request):
 # todo: 以下是api接口
 def save(request):
     '''
-    todo: save tag
+    save tag datal,
+    {"sencence_id":int,"pos":"x(int),y(int)","entity":"position","type":int}
     :param request:
     :return:
+   {"success": true, "msg": "Save data success", "code": 0, "data": ""}
     '''
-    pass
+    if request.method == "GET":
+        return get_method_error()
+
+    
 
 def list_all(request):
     '''
