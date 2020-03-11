@@ -96,10 +96,67 @@ def list_relation_type(request):
     return JsonResponse(success_resp(data=response_data))
 
 def add_relation_type(request):
-    pass
+    '''
+    增加关系类型
+    :param request: input data format
+    {'type':'f'}
+    :return:
+    {"success": true, "msg": "", "code": 0, "data":""}
+    {'success':False,'msg':msg,'code':code,'data':data}
+    '''
+
+    if request.method == "GET":
+        return JsonResponse(fail_resp(code=GET_ERROR_CODE,msg=GET_ERROR_MSG))
+
+    body = json.loads(request.body)
+    relation_type = body.get('type')
+
+    try:
+        records = RelationType(name=relation_type)
+        records.save()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Add relation type failed!'))
+
+    return JsonResponse(success_resp(msg="Add relation type success!"))
+
 
 def del_relation_type(request):
-    pass
+    '''
+    删除关系类型
+    :param request:
+    {'id':int,'type':'f'}
+    :return:
+    {"success": true, "msg": "", "code": 0, "data":""}
+    {'success':False,'msg':msg,'code':code,'data':data}
+    '''
+    body = json.loads(request.body)
+    relation_id = body.get('id')
+
+    try:
+        RelationType.objects.get(pk=relation_id).delete()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Delete relation type failed!'))
+
+    return JsonResponse(success_resp(msg="Delete relation type success!"))
 
 def edit_relation_type(request):
-    pass
+    '''
+    改变关系类型
+    :param request:
+    {'id':int,'type':'f'}
+    :return:
+    {"success": true, "msg": "", "code": 0, "data":""}
+    {'success':False,'msg':msg,'code':code,'data':data}
+    '''
+    body = json.loads(request.body)
+    relation_id = body.get('id')
+    relation_type = body.get('type')
+
+    try:
+        records = RelationType.objects.get(pk=relation_id)
+        records.name = relation_type
+        records.save()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Edit relation type failed!'))
+
+    return JsonResponse(success_resp(msg="Edit relation type success!"))
