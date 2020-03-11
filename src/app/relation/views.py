@@ -7,6 +7,7 @@ from app.utils.tools import *
 from .models import RelationTag,RelationType
 
 import json
+from django.forms.models import model_to_dict
 
 def index(request):
     '''
@@ -51,7 +52,7 @@ def list_all(request):
     '''
     todo: 查看历史打标数据,分页
     :param request:
-    :return:
+    :return: int 数量
     '''
     pass
 
@@ -62,16 +63,26 @@ def count(request):
     :param request:
     :return:
     '''
-    pass
+    tag_data = list(RelationTag.objects.all().values())
+    return JsonResponse(success_resp(data=len(tag_data)))
 
 
 def delete(request):
     '''
     todo: delete a tag
-    :param request:
-    :return:
+    :param request: {'id':int}
+    :return: {'success':True,'msg':'Delete tag success!','code':0,'data':data}
     '''
-    pass
+    body = json.loads(request.body)
+    tag_id = body.get('id')
+
+    try:
+        RelationTag.objects.get(pk=tag_id).delete()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Delete tag failed!'))
+
+    return JsonResponse(success_resp(msg="Delete tag success!"))
+
 
 
 def edit(request):
@@ -87,10 +98,13 @@ def edit(request):
 def get(request):
     '''
     todo: 拿一条特定的数据。
-    :param request:
+    :param request: {'id':int}
     :return:
     '''
-    pass
+    body = json.loads(request.body)
+    tag_id = body.get('id')
+    tag_data = model_to_dict(RelationTag.objects.get(id=tag_id))
+    return JsonResponse(success_resp(msg="Get tag success!",data=tag_data))
 
 
 def list_relation_type(request):
