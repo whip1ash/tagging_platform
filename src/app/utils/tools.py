@@ -17,6 +17,15 @@ GET_ERROR_MSG = "This api only support post method!"
 POST_ERROR_CODE = 999
 POST_ERROR_MSG = "This api only support get method!"
 
+RECORD_NOT_EXIST_CODE = 404
+
+SAVE_FAILED_CODE = 1
+SAVE_FAILED_MSG = "Save failed!"
+SAVE_SUCCESS_MSG = "Save Successed!"
+
+WRONG_PARAM_CODE = 2
+WRONG_PARAM_MSG = "You Input wrong parameters!"
+
 get_method_error = lambda : JsonResponse(fail_resp(code=GET_ERROR_MSG,msg=GET_ERROR_MSG))
 post_method_error = lambda : JsonResponse(fail_resp(code=POST_ERROR_CODE,msg=POST_ERROR_MSG))
 
@@ -26,3 +35,17 @@ def success_resp(msg='',data=''):
 
 def fail_resp(code,msg,data=''):
     return {'success':False,'msg':msg,'code':code,'data':data}
+
+def verify_pos(pos):
+    split_pos = pos.split(',')
+
+    if not split_pos:
+        return False
+
+    for item in split_pos:
+        if not isinstance(item,int):
+            return False
+    return True
+
+def page2offset(page,limit):
+    return page*limit
