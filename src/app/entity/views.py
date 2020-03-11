@@ -7,6 +7,7 @@ from app.utils.tools import *
 from .models import EntityType,EntityTag
 
 import json
+from django.forms.models import model_to_dict
 
 def index(request):
     '''
@@ -59,36 +60,47 @@ def list_all(request):
 def count(request):
     '''
     todo: 数据数量，考虑是否要合并到list接口中
-    :param request:
-    :return:
+    :param request: null
+    :return: int 数量
     '''
-    pass
+    tag_data = list(EntityTag.objects.all().values())
+    return JsonResponse(success_resp(data=len(tag_data)))
 
 def delete(request):
     '''
     todo: delete a tag
-    :param request:
-    :return:
+    :param request: {'id':int}
+    :return: 
+    {'success':True,'msg':'Delete tag success!','code':0,'data':data}
     '''
-    pass
+    body = json.loads(request.body)
+    tag_id = body.get('id')
+
+    try:
+        EntityTag.objects.get(pk=tag_id).delete()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Delete tag failed!'))
+
+    return JsonResponse(success_resp(msg="Delete tag success!"))
 
 def edit(request):
     '''
     todo: 此接口保留不实现，edit功能同save
     :param request:
-    :return:
+    :return: 
     '''
 
-    pass
 
 def get(request):
     '''
     todo: 拿一条特定的数据。
-    :param request:
+    :param request:{'id':int}
     :return:
     '''
-
-    pass
+    body = json.loads(request.body)
+    tag_id = body.get('id')
+    tag_data = model_to_dict(EntityTag.objects.get(id=tag_id))
+    return JsonResponse(success_resp(msg="Get tag success!",data=tag_data))
 
 def list_entity_type(request):
     '''
