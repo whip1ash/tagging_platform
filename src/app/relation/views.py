@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from app.utils.tools import *
 from .models import RelationTag,RelationType
 
+import json
+
 def index(request):
     '''
     todo: 关系打标index页面，存在以下几个链接，查看未/已打标的句子、查看已打标的关系数据、开始打标
@@ -45,7 +47,7 @@ def save(request):
     pass
 
 
-def list(request):
+def list_all(request):
     '''
     todo: 查看历史打标数据,分页
     :param request:
@@ -92,7 +94,7 @@ def get(request):
 
 
 def list_relation_type(request):
-    response_data = list(RelationType.object.all().value())
+    response_data = list(RelationType.objects.all().values())
     return JsonResponse(success_resp(data=response_data))
 
 def add_relation_type(request):

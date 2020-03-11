@@ -43,7 +43,7 @@ def save(request):
     '''
     pass
 
-def list(request):
+def list_all(request):
     '''
     todo: 查看历史打标数据,分页
     :param request:
@@ -161,9 +161,3 @@ def edit_entity_type(request):
         return JsonResponse(fail_resp(code=1,msg='Edit entity type failed!'))
 
     return JsonResponse(success_resp(msg="Edit entity type success!"))
-
-    :param request:
-    {'id':int,'type':'f'}
-    :return:
-    '''
-    pass
