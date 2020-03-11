@@ -123,15 +123,44 @@ def add_entity_type(request):
 
 def del_entity_type(request):
     '''
-
+    删除实体类型
     :param request:
     {'id':int,'type':'f'}
     :return:
+    {"success": true, "msg": "", "code": 0, "data":""}
+    {'success':False,'msg':msg,'code':code,'data':data}
     '''
-    pass
+    body = json.loads(request.body)
+    entity_id = body.get('id')
+
+    try:
+        EntityType.objects.get(pk=entity_id).delete()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Delete entity type failed!'))
+
+    return JsonResponse(success_resp(msg="Delete entity type success!"))
 
 def edit_entity_type(request):
     '''
+    改变实体类型
+    :param request:
+    {'id':int,'type':'f'}
+    :return:
+    {"success": true, "msg": "", "code": 0, "data":""}
+    {'success':False,'msg':msg,'code':code,'data':data}
+    '''
+    body = json.loads(request.body)
+    entity_id = body.get('id')
+    entity_type = body.get('type')
+
+    try:
+        records = EntityType.objects.get(pk=entity_id)
+        records.name = entity_type
+        records.save()
+    except:
+        return JsonResponse(fail_resp(code=1,msg='Edit entity type failed!'))
+
+    return JsonResponse(success_resp(msg="Edit entity type success!"))
 
     :param request:
     {'id':int,'type':'f'}
