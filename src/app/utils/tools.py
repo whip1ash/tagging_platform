@@ -10,6 +10,12 @@
 @desc: Some tools
 '''
 
+GET_ERROR_CODE = 998
+GET_ERROR_MSG = "This api only support post method!"
+POST_ERROR_CODE = 999
+POST_ERROR_MSG = "This api only support get method!"
+
+
 def success_resp(msg='',data=''):
     return {'success':True,'msg':msg,'code':0,'data':data}
 

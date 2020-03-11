@@ -106,6 +106,9 @@ def add_entity_type(request):
     {'success':False,'msg':msg,'code':code,'data':data}
     '''
 
+    if request.method == "GET":
+        return JsonResponse(fail_resp(code=GET_ERROR_CODE,msg=GET_ERROR_MSG))
+
     body = json.loads(request.body)
     entity_type = body.get('type')
 
