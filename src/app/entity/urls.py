@@ -14,8 +14,13 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url('list',views.list_entity_type,name='List entity types.'),
-    url('add',views.add_entity_type,name='Add entity types'),
-    url('delete',views.del_entity_type,name='Delete entity types'),
-    url('edit',views.edit_entity_type,name='Edit entity types')
+    url('ListType',views.list_entity_type,name='List entity types.'),
+    url('AddType',views.add_entity_type,name='Add entity types'),
+    url('DelType',views.del_entity_type,name='Delete entity types'),
+    url('EditType',views.edit_entity_type,name='Edit entity types'),
+    url('SaveTag',views.save,name='Save tags'),
+    url('ListAll',views.list_all,name='List History'),
+    url('CountTag',views.count,name='Tags amount'),
+    url('DelTag',views.delete,name='Delete specific tag'),
+    url('GetTag',views.get,name='Get specific tag content')  
 ]

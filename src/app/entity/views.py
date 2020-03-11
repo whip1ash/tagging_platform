@@ -7,6 +7,7 @@ from app.utils.tools import *
 from .models import EntityType,EntityTag
 
 import json
+from django.forms.models import model_to_dict
 
 def index(request):
     '''
@@ -62,7 +63,7 @@ def count(request):
     :param request: null
     :return: int 数量
     '''
-    tag_data = list(EntityTag.objects.all().values)
+    tag_data = list(EntityTag.objects.all().values())
     return JsonResponse(success_resp(data=len(tag_data)))
 
 def delete(request):
@@ -85,8 +86,8 @@ def delete(request):
 def edit(request):
     '''
     todo: 此接口保留不实现，edit功能同save
-    :param request:{'id':int,'edit_colume':colume_name,'edit_content':content}
-    :return: {'success':True,'msg':'Edit tag success!','code':0,'data':data}
+    :param request:
+    :return: 
     '''
 
 
@@ -96,7 +97,10 @@ def get(request):
     :param request:{'id':int}
     :return:
     '''
-    
+    body = json.loads(request.body)
+    tag_id = body.get('id')
+    tag_data = model_to_dict(EntityTag.objects.get(id=tag_id))
+    return JsonResponse(success_resp(msg="Get tag success!",data=tag_data))
 
 def list_entity_type(request):
     '''
