@@ -26,9 +26,13 @@ SAVE_SUCCESS_MSG = "Save Successed!"
 WRONG_PARAM_CODE = 2
 WRONG_PARAM_MSG = "You Input wrong parameters!"
 
+DATABASE_ERROR = 3
+DELETE_ERROR = 4
+
 get_method_error = lambda : JsonResponse(fail_resp(code=GET_ERROR_MSG,msg=GET_ERROR_MSG))
 post_method_error = lambda : JsonResponse(fail_resp(code=POST_ERROR_CODE,msg=POST_ERROR_MSG))
 
+get_exception = lambda e: {"Exception":str(e)}
 
 def success_resp(msg='',data=''):
     return {'success':True,'msg':msg,'code':0,'data':data}

@@ -66,7 +66,7 @@ def sentence_count(request):
 
 def sentence_get(request):
     '''
-    todo: 取一条未打标的数据，同样判断三种来源情况
+    todo: 取一条未打标的数据，同样判断两种来源情况 entity/relation
     :param request:
     :return:
     '''
