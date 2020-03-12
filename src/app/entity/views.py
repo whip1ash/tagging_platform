@@ -12,43 +12,43 @@ from django.forms.models import model_to_dict
 
 
 def index(request):
-    """
+    '''
     todo: 实体打标index页面，存在以下几个链接，查看未/已打标的句子、查看已打标的实体数据、开始打标
     :param request:
     :return:
-    """
+    '''
     return render(request, 'entity/index.html')
 
 
 def tag_view(request):
-    """
+    '''
     todo: 打标的页面
     api: 增加打标/考虑update情况(保存功能)，考虑将add和update两个接口合并、下一条数据(sentence中实现)
     :param request:
     :return:
-    """
+    '''
     return render(request, 'entity/tag.html')
 
 
 def tag_history(request):
-    """
+    '''
     todo 历史打标数据的页面
     api: list、delete、edit、get
     :param request:
     :return:
-    """
+    '''
     return render(request, 'entity/history.html')
 
 
 # 以下是api接口
 def save(request):
-    """
+    '''
     save tag datal,
     {"tag_id":int,"sentence_id":int,"pos":"x(int),y(int)","entity":"Person","type":int}
     :param request:
     :return:
    {"success": true, "msg": "Save data success", "code": 0, "data": ""}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -92,12 +92,12 @@ def save(request):
 
 
 def list_all(request):
-    """
+    '''
     查看历史打标数据,分页
     :param request:
     {"page":0,"limit":10}
     :return:
-    """
+    '''
     if request.method == "POST":
         return post_method_error()
 
@@ -115,11 +115,11 @@ def list_all(request):
 
 
 def count(request):
-    """
+    '''
     数据数量，考虑是否要合并到list接口中
     :param request: null
     :return: int 数量
-    """
+    '''
     if request.method == "POST":
         return post_method_error()
 
@@ -131,12 +131,12 @@ def count(request):
 
 
 def delete(request):
-    """
+    '''
     delete a tag 考虑删除sentence问题
     :param request: {'id':int}
     :return:
     {'success':True,'msg':'Delete tag success!','code':0,'data':data}
-    """
+    '''
 
     if request.method == "GET":
         return get_method_error()
@@ -157,19 +157,19 @@ def delete(request):
 
 
 def edit(request):
-    """
+    '''
     此接口保留不实现，edit功能同save
     :param request:
     :return:
-    """
+    '''
 
 
 def get(request):
-    """
+    '''
     拿一条特定的数据。
     :param request:{'id':int}
     :return:
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -186,12 +186,12 @@ def get(request):
 
 
 def list_entity_type(request):
-    """
+    '''
     获取实体类型列表
     :param request:
     :return:
     {"success": true, "msg": "", "code": 0, "data": [{"id": 1, "name": "a"}, {"id": 2, "name": "b"}, {"id": 3, "name": "c"}, {"id": 4, "name": "d"}, {"id": 5, "name": "e"}]}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -204,14 +204,14 @@ def list_entity_type(request):
 
 
 def add_entity_type(request):
-    """
+    '''
     增加实体类型
     :param request: input data format
     {'type':'f'}
     :return:
     {"success": true, "msg": "", "code": 0, "data":""}
     {'success':False,'msg':msg,'code':code,'data':data}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -228,7 +228,7 @@ def add_entity_type(request):
 
 
 def del_entity_type(request):
-    """
+    '''
     删除实体类型,删除实体类型时会删除相应的打标数据，因为外键存在。
     判断删除tags后的sentence状态。
     filter筛选跟type有关的所有数据的tag_id 然后遍历,思考先删后删问题
@@ -241,7 +241,7 @@ def del_entity_type(request):
     :return:
     {"success": true, "msg": "", "code": 0, "data":""}
     {'success':False,'msg':msg,'code':code,'data':data}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -269,14 +269,14 @@ def del_entity_type(request):
 
 
 def edit_entity_type(request):
-    """
+    '''
     改变实体类型
     :param request:
     {'id':int,'type':'f'}
     :return:
     {"success": true, "msg": "", "code": 0, "data":""}
     {'success':False,'msg':msg,'code':code,'data':data}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 

@@ -9,11 +9,11 @@ import json
 from django.forms.models import model_to_dict
 
 def index(request):
-    """
+    '''
     index 页面两个跳转，一个跳到实体打标，另一个跳到关系打标
     :param request:
     :return:
-    """
+    '''
     return render(request, 'normal/index.html')
 
 
@@ -27,23 +27,23 @@ def server_error(request):
 
 # todo: url这里添加新的路由:sentence
 def sentence_index(request):
-    """
+    '''
     todo: 查看数据库中现存的句子。页面中发json，取历史记录到前端。
     :param request:
     :return:
-    """
+    '''
     # todo: 新建html模板
     return render(request, 'sentence/index.html')
 
 
 def sentence_list(request):
-    """
+    '''
     todo: 返回sentence表中的所有数据，记得分页
     1k条，50条/页。1-20页，拟输入为1-20的整数
     若页数超过20给error？
     :param request: {'page':int}
     :return: 50条数据，包括{'id','content','source','entity_tag','relation_tag'}
-    """
+    '''
     if request.method == "GET":
         return get_method_error()
 
@@ -51,18 +51,18 @@ def sentence_list(request):
     page_no = body.get('page')
 
     # try:
-    list_data = list(Sentence.objects.all()[(page_no-1)*50:page_no*50])
+    list_data = list(Sentence.objects.all()[(page_no-1)*50:page_no*50].values())
     # except:
-    #     return JsonResponse(fail_resp(code=))
+    #     return JsonResponse(fail_resp(code=)
     return JsonResponse(success_resp(msg="Get Sentence successful",data=list_data))
 
 
 def sentence_done(request):
-    """
+    '''
     todo: 查看已打标的句子数据，判断来源，是entity、relation、all
     :param request:
     :return:
-    """
+    '''
     tagged_entity_data = model_to_dict(Sentence.objects.filter(entity_tag=True,relation_tag=False))
     tagged_relation_data = model_to_dict(Sentence.objects.filter(entity_tag=False,relation_tag=True))
     tagged_finished_data = model_to_dict(Sentence.objects.filter(entity_tag=True,relation_tag=True))
@@ -71,11 +71,11 @@ def sentence_done(request):
 
 
 def sentence_doing(request):
-    """
+    '''
     todo: 查看正在打标中的数据，判断来源，entity、relation、all
     :param request:
     :return:
-    """
+    '''
 
 
 
@@ -93,17 +93,17 @@ def sentence_count(request):
 
 
 def sentence_get(request):
-    """
+    '''
     todo: 取一条未打标的数据，同样判断两种来源情况 entity/relation
     :param request:
     :return:
-    """
+    '''
 
 
 
 def export(request):
-    """
+    '''
     todo: 数据导出功能，模块化拆出来。通过参数判断导出实体的数据还是关系的数据
     :param request:
     :return:
-    """
+    '''
