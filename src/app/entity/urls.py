@@ -18,9 +18,9 @@ urlpatterns = [
     url('AddType',views.add_entity_type,name='Add entity types'),
     url('DelType',views.del_entity_type,name='Delete entity types'),
     url('EditType',views.edit_entity_type,name='Edit entity types'),
-    url('SaveTag',views.save,name='Save tags'),
-    url('ListAll',views.list_all,name='List History'),
-    url('CountTag',views.count,name='Tags amount'),
-    url('DelTag',views.delete,name='Delete specific tag'),
-    url('GetTag',views.get,name='Get specific tag content')  
+    url('Save',views.save,name='Save tags'),
+    url('List',views.list_all,name='List History'),
+    url('Count',views.count,name='Tags amount'),
+    url('Del',views.delete,name='Delete specific tag'),
+    url('Get',views.get,name='Get specific tag content')
 ]

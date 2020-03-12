@@ -92,7 +92,7 @@ def save(request):
             return JsonResponse(fail_resp(code=SAVE_FAILED_CODE,msg=SAVE_FAILED_MSG,data=get_exception(e)))
 
     return JsonResponse(success_resp(msg=SAVE_SUCCESS_MSG))
-        
+
 
 
 def list_all(request):

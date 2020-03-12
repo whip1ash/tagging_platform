@@ -25,5 +25,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',index,name="index"),
     path('entity/',include('app.entity.urls')),
-    path('relation/', include('app.relation.urls'))
+    path('relation/', include('app.relation.urls')),
+    path('sentence/',include('app.normal.urls'))
 ]
