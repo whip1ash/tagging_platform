@@ -18,9 +18,9 @@ urlpatterns = [
     url('AddType',views.add_relation_type,name='Add relation types'),
     url('DelType',views.del_relation_type,name='Delete relation types'),
     url('EditType',views.edit_relation_type,name='Edit relation types'),
-    url('SaveTag',views.save,name='Save tags'),
-    url('ListAll',views.list_all,name='List History'),
-    url('CountTag',views.count,name='Tags amount'),
-    url('DelTag',views.delete,name='Delete specific tag'),
-    url('GetTag',views.get,name='Get specific tag content')
+    url('Save',views.save,name='Save tags'),
+    url('List',views.list_all,name='List History'),
+    url('Count',views.count,name='Tags amount'),
+    url('Del',views.delete,name='Delete specific tag'),
+    url('Get',views.get,name='Get specific tag content')
 ]

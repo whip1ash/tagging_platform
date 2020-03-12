@@ -50,7 +50,7 @@ def save(request):
 
     body = json.loads(request.body)
     tag_id = int(body.get('tag_id')) if int(body.get('tag_id')) > 0 else 0
-    sentence_id = int(body.get('sencence_id'))
+    sentence_id = int(body.get('sentence_id'))
     pos = body.get('pos')
 
     # wrong pos
@@ -84,7 +84,7 @@ def save(request):
         except Exception as e:
             return JsonResponse(fail_resp(code=SAVE_FAILED_CODE,msg=SAVE_FAILED_MSG,data=get_exception(e)))
 
-        return JsonResponse(success_resp(msg=SAVE_SUCCESS_MSG))
+    return JsonResponse(success_resp(msg=SAVE_SUCCESS_MSG))
 
 def list_all(request):
     '''
@@ -93,15 +93,19 @@ def list_all(request):
     {"page":0,"limit":10}
     :return:
     '''
-    if request.method == "GET":
-        return get_method_error()
+    if request.method == "POST":
+        return post_method_error()
 
     body = json.loads(request.body)
     page = int(body.get('page')) if int(body.get('page')) > 0 else 0
     limit = int(body.get('limit'))
     offset = page2offset(page,limit)
 
-    tags = list(EntityTag.objects.all()[offset:limit].values())
+    try:
+        tags = list(EntityTag.objects.all()[offset:limit].values())
+    except Exception as e:
+        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="List all entity tags failed !",data=get_exception(e)))
+
     return JsonResponse(success_resp(data=tags))
 
 
@@ -111,8 +115,8 @@ def count(request):
     :param request: null
     :return: int 数量
     '''
-    if request.method == "GET":
-        return get_method_error()
+    if request.method == "POST":
+        return post_method_error()
 
     try:
         num = EntityTag.objects.count()
@@ -134,16 +138,14 @@ def delete(request):
     body = json.loads(request.body)
     tag_id = int(body.get('id'))
 
+    # verify if need to modify sentence flag
+    # 遍历当前表，使用tag_id，tag和relation不通用
     if not exist_sentence(tag_id):
         return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE,msg="This tag does't have relate sentence"))
     try:
         EntityTag.objects.get(pk=tag_id).delete()
     except:
         return JsonResponse(fail_resp(code=DELETE_ERROR,msg='Delete tag failed!'))
-
-    # verify if need to modify sentence flag
-    # 遍历当前表，使用tag_id，tag和relation不通用
-
 
     return JsonResponse(success_resp(msg="Delete tag success!"))
 
@@ -170,7 +172,7 @@ def get(request):
     try:
         tag_data = model_to_dict(EntityTag.objects.get(id=tag_id))
     except Exception as e:
-        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Failed to get a record.",data=get_exception(e)))
+        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Failed to get a entity type record.",data=get_exception(e)))
 
     return JsonResponse(success_resp(msg="Get tag success!",data=tag_data))
 
@@ -234,10 +236,10 @@ def del_entity_type(request):
         return get_method_error()
 
     body = json.loads(request.body)
-    entity_id = body.get('id')
+    entity_id = int(body.get('id'))
 
     try:
-        records = list(EntityTag.objects.filter(type__id=1).all().values())
+        records = list(EntityTag.objects.filter(type__id=entity_id).all().values())
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get tags by type failed!",data=get_exception(e)))
 
@@ -251,7 +253,7 @@ def del_entity_type(request):
     try:
         EntityType.objects.get(pk=entity_id).delete()
     except:
-        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg='Delete entity type failed!'))
+        return JsonResponse(fail_resp(code=DELETE_ERROR,msg='Delete entity type failed!'))
 
     return JsonResponse(success_resp(msg="Delete entity type success!"))
 
@@ -264,8 +266,11 @@ def edit_entity_type(request):
     {"success": true, "msg": "", "code": 0, "data":""}
     {'success':False,'msg':msg,'code':code,'data':data}
     '''
+    if request.method == "GET":
+        return get_method_error()
+
     body = json.loads(request.body)
-    entity_id = body.get('id')
+    entity_id = int(body.get('id'))
     entity_type = body.get('type')
 
     try:
@@ -280,7 +285,6 @@ def edit_entity_type(request):
 # 判断当前数据库中是否还有当前的sentence_id，如果没有则需要更改sentence标志位。
 # 考虑该操作放在删除前还是删除后？应该放在删除前，防止查询未成功但是删除数据的情况。
 def exist_sentence(tag_id):
-
     try:
         num = EntityTag.objects.filter(sentence_id__id=tag_id).count()
     except Exception as e:
@@ -293,9 +297,8 @@ def exist_sentence(tag_id):
     elif num == 1 :
         try:
             tag = EntityTag.objects.get(id=tag_id)
-            sentence_id = tag.sentence_id
 
-            sentence = Sentence(id=sentence_id)
+            sentence = Sentence(id=tag.sentence_id_id)
             sentence.entity_tag = False
             sentence.save()
         except Exception as e:
