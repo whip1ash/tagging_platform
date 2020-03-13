@@ -2,7 +2,7 @@
 
 ### 1. sentence_list
 
-1. 请求域名：/normal/List
+1. 请求域名：/Sentence/List
 2. 输入参数：
 
 ```json
@@ -40,7 +40,7 @@
 
 ### 2. sentence_done
 
-1. 请求域名：/normal/Done
+1. 请求域名：/Sentence/Done
 2. 输入参数：
 
 ```json
@@ -79,7 +79,7 @@
 
 ### 3. sentence_doing
 
-1. 请求域名：/normal/Doing
+1. 请求域名：/Sentence/Doing
 2. 输入参数：
 
 ```json
@@ -117,7 +117,7 @@
 
 ### 4. sentence_count
 
-1. 请求域名：/normal/count
+1. 请求域名：/Sentence/count
 2. 输入参数：
 
 ```json
@@ -151,7 +151,7 @@
 
 ### 5. sentence_get
 
-1. 请求域名：/normal/Get
+1. 请求域名：/Sentence/Get
 2. 输入参数：
 
 ```json

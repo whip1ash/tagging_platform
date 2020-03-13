@@ -1,7 +1,7 @@
 # Entity 接口列表
 
 ### 1. save
-1. 请求域名：/entity/Save/
+1. 请求域名：/Entity/Save/
 2. 输入参数：
 ```json
 {
@@ -32,7 +32,7 @@
 
 ### 2. list_all
 
-1. 请求域名：/entity/List
+1. 请求域名：/Entity/List
 2. 输入参数：
 
 ```json
@@ -70,7 +70,7 @@
 
 ### 3. count
 
-1. 请求域名：/entity/Count
+1. 请求域名：/Entity/Count
 2. 输入参数：
 
 ```json
@@ -99,7 +99,7 @@
 
 ### 4. delete
 
-1. 请求域名：/entity/Del
+1. 请求域名：/Entity/Del
 2. 输入参数：
 
 ```json
@@ -129,7 +129,7 @@
 
 ### 5. get
 
-1. 请求域名：/entity/Get
+1. 请求域名：/Entity/Get
 2. 输入参数：
 
 ```json
@@ -166,7 +166,7 @@
 
 ### 6. list_entity_type
 
-1. 请求域名：/entity/ListType
+1. 请求域名：/Entity/ListType
 2. 输入参数：
 
 ```json
@@ -200,7 +200,7 @@
 
 ### 7. add_entity_type
 
-1. 请求域名：/entity/AddType
+1. 请求域名：/Entity/AddType
 2. 输入参数：
 
 ```json
@@ -229,7 +229,7 @@
 
 ### 8. del_entity_type
 
-1. 请求域名：/entity/DelType
+1. 请求域名：/Entity/DelType
 2. 输入参数：
 
 ```json
@@ -259,10 +259,11 @@
    | DELETE_ERROR          | 4    | Delete entity type failed!            |
    | RECORD_NOT_EXIST_CODE | 404  | A wrong tag id                        |
    | RECORD_NOT_EXIST_CODE | 404  | This tag doesn't have relate sentence |
+   | DATA_REPETATION       |5     | Input type already existed! |
 
 ### 9. edit_entity_type
 
-1. 请求域名：/entity/EditType
+1. 请求域名：/Entity/EditType
 2. 输入参数：
 
 ```json
@@ -289,12 +290,13 @@
    | ---------------- | ---- | ---------------------------------- |
    | GET_ERROR_CODE   | 998  | This api only support post method! |
    | SAVE_FAILED_CODE | 1    | Save failed!                       |
+   | DATA_REPETATION  |5     | Input type already existed!        |
 
 # Relation 接口列表
 
 ### 1. save
 
-1. 请求域名：/relation/Save
+1. 请求域名：/Relation/Save
 2. 输入参数：
 
 ```json
@@ -331,7 +333,7 @@
 
 ### 2. list_all
 
-1. 请求域名：/relation/List
+1. 请求域名：/Relation/List
 2. 输入参数：
 
 ```json
@@ -371,7 +373,7 @@
 
 ### 3. count
 
-1. 请求域名：/relation/Count
+1. 请求域名：/Relation/Count
 2. 输入参数：
 
 ```json
@@ -400,7 +402,7 @@
 
 ### 4. delete
 
-1. 请求域名：/relation/Del
+1. 请求域名：/Relation/Del
 2. 输入参数：
 
 ```json
@@ -430,7 +432,7 @@
 
 ### 5. get
 
-1. 请求域名：/relation/Get
+1. 请求域名：/Relation/Get
 2. 输入参数：
 
 ```json
@@ -469,7 +471,7 @@
 
 ### 6. list_relation_type
 
-1. 请求域名：/relation/ListType
+1. 请求域名：/Relation/ListType
 2. 输入参数：
 
 ```json
@@ -502,7 +504,7 @@
 
 ### 7. add_entity_type
 
-1. 请求域名：/relation/AddType
+1. 请求域名：/Relation/AddType
 2. 输入参数：
 
 ```json
@@ -531,7 +533,7 @@
 
 ### 8. del_entity_type
 
-1. 请求域名：/relation/DelType
+1. 请求域名：/Relation/DelType
 2. 输入参数：
 
 ```json
@@ -564,7 +566,7 @@
 
 ### 9. edit_entity_type
 
-1. 请求域名：/realtion/EditType
+1. 请求域名：/Realtion/EditType
 2. 输入参数：
 
 ```json
