@@ -24,7 +24,7 @@ handler500 = server_error
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',index,name="index"),
-    path('entity/',include('app.entity.urls')),
-    path('relation/', include('app.relation.urls')),
-    path('sentence/',include('app.normal.urls'))
+    path('Entity/',include('app.entity.urls')),
+    path('Relation/', include('app.relation.urls')),
+    path('Sentence/',include('app.normal.urls'))
 ]

@@ -23,7 +23,6 @@ def page_not_found(request,exception):
 def server_error(request):
     return render(request,'normal/500.html')
 
-# todo: url这里添加新的路由:sentence
 def sentence_index(request):
     '''
     todo: 查看数据库中现存的句子。页面中发json，取历史记录到前端。
@@ -46,12 +45,12 @@ def sentence_list(request):
 
     body = json.loads(request.body)
     page = int(body.get("page")) if int(body.get("page")) > 0 else 0
-    limit = int(body.get("limit"))
+    limit = int(body.get("limit")) if int(body.get("limit")) > 0 else 10
 
     offset = page2offset(page,limit)
 
     try:
-        sentences = list(Sentence.objects.all()[offset,limit].values())
+        sentences = list(Sentence.objects.all()[offset:offset+limit].values())
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="List all sentence failed",data=get_exception(e)))
 
@@ -77,11 +76,11 @@ def sentence_done(request):
 
     try:
         if referer == "entity":
-            tagged_entities = queryset2list(Sentence.objects.filter(entity_tag=True).all()[offset:limit])
+            tagged_entities = queryset2list(Sentence.objects.filter(entity_tag=True).all()[offset:offset+limit])
         elif referer == "relation":
-            tagged_entities = queryset2list(Sentence.objects.filter(relation_tag=True).all()[offset:limit])
+            tagged_entities = queryset2list(Sentence.objects.filter(relation_tag=True).all()[offset:offset+limit])
         elif referer == "all":
-            tagged_entities = queryset2list(Sentence.objects.filter(entity_tag=True,relation_tag=True).all()[offset:limit])
+            tagged_entities = queryset2list(Sentence.objects.filter(entity_tag=True,relation_tag=True).all()[offset:offset+limit])
         else:
             return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Input a invalid referer"))
     except Exception as e:
@@ -167,9 +166,9 @@ def sentence_get(request):
 
     try:
         if referer == "entity":
-            sentence = model_to_dict(Sentence.objects.filter(entity_tag=False).all()[0,1])
+            sentence = queryset2list(Sentence.objects.filter(entity_tag=False).all()[0:1])
         elif referer == "relation":
-            sentence = model_to_dict(Sentence.objects.filter(relation_tag=False).all()[0,1])
+            sentence = queryset2list(Sentence.objects.filter(relation_tag=False).all()[0:1])
         else:
             return JsonResponse(fail_resp(code=WRONG_PARAM_CODE, msg="Input a invalid referer"))
     except Exception as e:
