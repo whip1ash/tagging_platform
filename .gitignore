@@ -2,3 +2,5 @@
 .idea/
 *.pyc
 migrations/
+*.burp
+*.burp.backup
