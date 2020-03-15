@@ -45,9 +45,9 @@
 
 ```json
 {
-    "referer": string,
-    "page": int,
-    "limit": int
+    "referer": string, entity
+    "page": int, 0 
+    "limit": int 10
 }
 ```
 
