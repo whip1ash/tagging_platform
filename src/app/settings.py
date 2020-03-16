@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app.normal',
     'app.entity',
-    'app.relation'
+    'app.relation',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -127,3 +129,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 APPEND_SLASH= False
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+# 正式上线时配置cors
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = (
+#        '*.whip1ash.cn',
+# )
