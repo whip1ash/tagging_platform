@@ -6,7 +6,7 @@ migrations/
 *.burp.backup
 ecosystem.config.js
 *.out
-*/settings.py
-*/deploy_settings.py
+./src/app/settings.py
+./src/app/deploy_settings.py
 ./bin/run.sh
 ./bin/deploy_settings.sh
