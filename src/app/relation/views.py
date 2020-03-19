@@ -118,11 +118,19 @@ def list_all(request):
     offset = page2offset(page,limit)
 
     try:
-        tags = list(RelationTag.objects.all()[offset:offset+limit].values())
+        tags = RelationTag.objects.all()[offset:offset+limit]
+        tags_values = list(tags.values())
+
+        for tag in tags:
+            sen_content = tag.sentence_id.content
+            for item in tags_values:
+                if item['id'] == tag.id:
+                    item['sen_content'] = sen_content
+                    break
     except Exception as e :
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="List all relation tags failed !",data=get_exception(e)))
 
-    return JsonResponse(success_resp(data=tags))
+    return JsonResponse(success_resp(data=tags_values))
 
 def count(request):
     '''
