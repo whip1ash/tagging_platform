@@ -10,4 +10,5 @@ src/app/settings.py
 src/app/deploy_settings.py
 run.sh
 deploy_settings.sh
+auto_pull.sh
 secretkey.txt
