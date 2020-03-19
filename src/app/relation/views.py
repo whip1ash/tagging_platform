@@ -123,9 +123,11 @@ def list_all(request):
 
         for tag in tags:
             sen_content = tag.sentence_id.content
+            type = tag.type.name
             for item in tags_values:
                 if item['id'] == tag.id:
                     item['sen_content'] = sen_content
+                    item['type'] = type
                     break
     except Exception as e :
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="List all relation tags failed !",data=get_exception(e)))

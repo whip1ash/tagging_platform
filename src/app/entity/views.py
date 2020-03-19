@@ -114,10 +114,12 @@ def list_all(request):
         tags_values = list(tags.values())
         for tag in tags:
             sen_content = tag.sentence_id.content
+            type = tag.type.name
             #这里无法确定有序性，用一个比较蠢的方法，暴力搜吧。太蠢了，有时间学习一下。
             for item in tags_values:
                 if item['id'] == tag.id:
                     item['sen_content'] = sen_content
+                    item['type'] = type
                     break
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="List all entity tags failed !",data=get_exception(e)))
