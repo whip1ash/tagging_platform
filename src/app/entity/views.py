@@ -263,22 +263,36 @@ def del_entity_type(request):
 
     body = json.loads(request.body)
     entity_id = int(body.get('id'))
+    valied_type = False
 
     try:
         records = EntityTag.objects.filter(type=entity_id).all()
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get tags by type failed!",data=get_exception(e)))
 
+    # 考虑本身这个标签就没有被打过的情况。
+    # 这里有两种情况，一个是这个实体类型没有被打过标，第二种错误的tag_id
     if not records:
-        return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE,msg="A wrong tag id"))
-
-    for item in records:
         try:
-            if not exist_sentence(item.sentence_id):
-                return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE, msg="This tag doesn't have relate sentence. tag_id:{}".format(item['id'])))
+            entity_type = EntityTag.objects.get(pk=entity_id)
         except Exception as e:
-            return JsonResponse(
-                fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
+            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get tags by type failed!", data=get_exception(e)))
+
+        # 如果有则说说该类型是存在的。
+        if entity_type:
+            valied_type = True
+        else:
+            return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE,msg="A wrong tag id"))
+
+    # 当该类型是存在但是没有关联任何的句子的时候，跳过下面的逻辑，直接删除。
+    if not valied_type:
+        for item in records:
+            try:
+                if not exist_sentence(item.sentence_id):
+                    return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE, msg="This tag doesn't have relate sentence. tag_id:{}".format(item['id'])))
+            except Exception as e:
+                return JsonResponse(
+                    fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
 
     try:
         EntityType.objects.get(pk=entity_id).delete()

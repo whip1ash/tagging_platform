@@ -267,19 +267,32 @@ def del_relation_type(request):
 
     body = json.loads(request.body)
     relation_id = int(body.get('id'))
+    valied_type = False
 
     try:
         records = list(RelationTag.objects.filter(type__id=relation_id).all().values())
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get tags by type failed!"),data=get_exception(e))
 
-    for item in records:
+    if not records:
         try:
-            if not exist_sentence(item.sentence_id):
-                return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE,msg="This tag doesn't have relate sentence. tag_id:{}".format(item['id'])))
+            relation_type = RelationTag.objects.get(pk=relation_id)
         except Exception as e:
-            return JsonResponse(
-                fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
+            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get tags by type failed!", data=get_exception(e)))
+
+        if relation_type:
+            valied_type = True
+        else:
+            return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE, msg="A wrong tag id"))
+
+    if not valied_type:
+        for item in records:
+            try:
+                if not exist_sentence(item.sentence_id):
+                    return JsonResponse(fail_resp(code=RECORD_NOT_EXIST_CODE,msg="This tag doesn't have relate sentence. tag_id:{}".format(item['id'])))
+            except Exception as e:
+                return JsonResponse(
+                    fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
 
     try:
         RelationType.objects.get(pk=relation_id).delete()
