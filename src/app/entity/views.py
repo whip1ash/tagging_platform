@@ -262,11 +262,11 @@ def del_entity_type(request):
         return get_method_error()
 
     body = json.loads(request.body)
-    entity_id = int(body.get('id'))
+    tag_id = int(body.get('id'))
     valied_type = False
 
     try:
-        records = EntityTag.objects.filter(type=entity_id).all()
+        records = EntityTag.objects.filter(type=tag_id).all()
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get tags by type failed!",data=get_exception(e)))
 
@@ -274,7 +274,7 @@ def del_entity_type(request):
     # 这里有两种情况，一个是这个实体类型没有被打过标，第二种错误的tag_id
     if not records:
         try:
-            entity_type = EntityTag.objects.get(pk=entity_id)
+            entity_type = EntityType.objects.get(pk=tag_id)
         except Exception as e:
             return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get type by type_id failed!", data=get_exception(e)))
 
@@ -295,7 +295,7 @@ def del_entity_type(request):
                     fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
 
     try:
-        EntityType.objects.get(pk=entity_id).delete()
+        EntityType.objects.get(pk=tag_id).delete()
     except:
         return JsonResponse(fail_resp(code=DELETE_ERROR,msg='Delete entity type failed!'))
 

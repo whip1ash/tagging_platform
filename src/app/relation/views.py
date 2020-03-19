@@ -266,17 +266,17 @@ def del_relation_type(request):
         return get_method_error()
 
     body = json.loads(request.body)
-    relation_id = int(body.get('id'))
+    tag_id = int(body.get('id'))
     valied_type = False
 
     try:
-        records = list(RelationTag.objects.filter(type__id=relation_id).all().values())
+        records = list(RelationTag.objects.filter(type__id=tag_id).all().values())
     except Exception as e:
         return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get tags by type failed!"),data=get_exception(e))
 
     if not records:
         try:
-            relation_type = RelationTag.objects.get(pk=relation_id)
+            relation_type = RelationType.objects.get(pk=tag_id)
         except Exception as e:
             return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get type by type_id failed!", data=get_exception(e)))
 
@@ -295,7 +295,7 @@ def del_relation_type(request):
                     fail_resp(code=DATABASE_ERROR, msg="exist_sentence() have some error.",data=get_exception(e)))
 
     try:
-        RelationType.objects.get(pk=relation_id).delete()
+        RelationType.objects.get(pk=tag_id).delete()
     except:
         return JsonResponse(fail_resp(code=DELETE_ERROR,msg='Delete relation type failed!'))
 
