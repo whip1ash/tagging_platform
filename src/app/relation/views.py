@@ -278,7 +278,7 @@ def del_relation_type(request):
         try:
             relation_type = RelationTag.objects.get(pk=relation_id)
         except Exception as e:
-            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get tags by type failed!", data=get_exception(e)))
+            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get type by type_id failed!", data=get_exception(e)))
 
         if relation_type:
             valied_type = True

@@ -276,7 +276,7 @@ def del_entity_type(request):
         try:
             entity_type = EntityTag.objects.get(pk=entity_id)
         except Exception as e:
-            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get tags by type failed!", data=get_exception(e)))
+            return JsonResponse(fail_resp(code=DATABASE_ERROR, msg="Get type by type_id failed!", data=get_exception(e)))
 
         # 如果有则说说该类型是存在的。
         if entity_type:
