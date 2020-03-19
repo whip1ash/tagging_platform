@@ -332,6 +332,12 @@ class Sen:
 
     @staticmethod
     def get_pos(self,str):
+        '''
+        格式化'pos'
+        :param self:
+        :param str:"1,2"
+        :return: [1,2]
+        '''
         tmp = re.split(r'\W+',str)
         res = []
         for i in tmp:
@@ -339,6 +345,12 @@ class Sen:
         return res
 
     def print_into_file(self,referer,data):
+        '''
+        输出到文件
+        :param referer:"entity"
+        :param data: {"id":int,...}
+        :return: None
+        '''
         if referer == "entity":
             fo = open("train_entity.txt","a+")
             entity_data = data
