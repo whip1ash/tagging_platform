@@ -12,7 +12,6 @@ from django.forms.models import model_to_dict
 
 def index(request):
     '''
-    todo: 关系打标index页面，存在以下几个链接，查看未/已打标的句子、查看已打标的关系数据、开始打标
     :param request:
     :return:
     '''
@@ -21,7 +20,6 @@ def index(request):
 
 def tag_view(request):
     '''
-    todo: 打标的页面
     api: 增加打标/考虑update情况(保存功能)，考虑将add和update两个接口合并、下一条数据(sentence中实现)
     :param request:
     :return:
@@ -31,7 +29,6 @@ def tag_view(request):
 
 def tag_history(request):
     '''
-    todo 历史打标数据的页面
     api: list、delete、edit、get
     :param request:
     :return:
@@ -98,7 +95,7 @@ def save(request):
         except Exception as e:
             return JsonResponse(fail_resp(code=SAVE_FAILED_CODE,msg=SAVE_FAILED_MSG,data=get_exception(e)))
 
-    return JsonResponse(success_resp(msg=SAVE_SUCCESS_MSG))
+    return JsonResponse(success_resp(msg=SAVE_SUCCESS_MSG,data={'tag_id':tag.id}))
 
 
 

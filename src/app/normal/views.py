@@ -29,11 +29,10 @@ def server_error(request):
 
 def sentence_index(request):
     '''
-    todo: 查看数据库中现存的句子。页面中发json，取历史记录到前端。
     :param request:
     :return:
     '''
-    # todo: 新建html模板
+
     return render(request,'sentence/index.html')
 
 
