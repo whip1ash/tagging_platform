@@ -59,11 +59,6 @@ def save(request):
     if not verify_pos(pos):
         return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Wrong parameter[head_pos]"))
 
-    try:
-        pos = index2pos(index,sentence_id)
-    except Exception as e :
-        return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg=WRONG_PARAM_MSG,data=get_exception(e)))
-
     # update
     if tag_id != 0:
         try:
