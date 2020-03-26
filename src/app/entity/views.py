@@ -52,9 +52,12 @@ def save(request):
     else:
         tag_id = 0
     sentence_id = int(body.get('sentence_id'))
-    index = body.get('index')
+    pos = body.get('pos')
     type = int(body.get('type_id'))
     entity = body.get('entity')
+
+    if not verify_pos(pos):
+        return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Wrong parameter[head_pos]"))
 
     try:
         pos = index2pos(index,sentence_id)
