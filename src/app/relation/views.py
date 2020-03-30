@@ -62,7 +62,7 @@ def save(request):
     tail_pos = body.get('tail_pos')
     if not verify_pos(tail_pos):
         return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Wrong parameter[tail_pos]"))
-    type = int(body.get('type'))
+    type = int(body.get('type_id'))
 
     # update
     if tag_id != 0:
