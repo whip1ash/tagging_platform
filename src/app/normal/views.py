@@ -110,11 +110,11 @@ def sentence_doing(request):
 
     try:
         if referer == "entity":
-            tagging_entities = queryset2list(Sentence.objects.filter(entity_tag=False).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.filter(entity_tag=False).all()[offset:offset+limit])
         elif referer == "relation":
-            tagging_entities = queryset2list(Sentence.objects.filter(relation_tag=False).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.filter(relation_tag=False).all()[offset:offset+limit])
         elif referer == "all":
-            tagging_entities = queryset2list(Sentence.objects.exclude(entity_tag=True, relation_tag=True).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.exclude(entity_tag=True, relation_tag=True).all()[offset:offset+limit])
         else:
             return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Input a invalid referer"))
     except Exception as e:
