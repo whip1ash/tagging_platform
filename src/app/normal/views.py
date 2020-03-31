@@ -179,6 +179,24 @@ def sentence_get(request):
 
     return JsonResponse(success_resp(msg="Get a sentence success",data=sentence))
 
+def sentence_delete(request):
+    if request.method == "GET":
+        return get_method_error()
+    body = json.loads(request.body)
+    sen_id  = body.get("id")
+
+    try:
+        records = EntityTag.objects.filter(type=sen_id).all()
+    except Exception as e:
+        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get Sentence failed!",data=get_exception(e)))
+
+    try:
+        Sentence.objects.get(pk=sen_id).delete()
+    except:
+        return JsonResponse(fail_resp(code=DELETE_ERROR,msg='Delete Sentence failed!'))
+
+    return JsonResponse(success_resp(msg="Delete Sentence success!"))
+
 
 def export(request):
     '''
