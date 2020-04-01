@@ -300,7 +300,6 @@ class Sen:
         :return:
         '''
         res = ['O'] * l
-        re = ['O'] * l
         for i in tag_data:
             tmp_pos = self.get_pos(i.get('pos'))
             entity_id = i.get('type')
@@ -369,7 +368,7 @@ class Sen:
                 fo.write('\n')
             fo.close()
         elif referer == 'relation':
-            fo = open("filepath\\train_relation.json", "a+")
+            fo = open("filepath\\rain_relation.json", "a+")
             relation_data = data
             for i in relation_data:
                 fo.write(str(i)+'\n')
