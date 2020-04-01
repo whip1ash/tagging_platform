@@ -18,5 +18,6 @@ urlpatterns = [
     url('Done',views.sentence_done,name='List done sentences'),
     url('Doing',views.sentence_doing,name="List doing sentences"),
     url('Count',views.sentence_count,name="Get the number of sentences"),
-    url('Get',views.sentence_get,name="Get a untagged sentence")
+    url('Get',views.sentence_get,name="Get a untagged sentence"),
+    url('Export',views.export,name="Export data")
 ]

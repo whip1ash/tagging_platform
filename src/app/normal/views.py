@@ -207,19 +207,20 @@ def export(request):
     data = []
     body = json.loads(request.body)
     referer = body.get("referer")
-    tmp_sentence = queryset2list(Sentence.objects.all().values())
+    tmp_sentence = queryset2list(Sentence.objects.all())
     for i in tmp_sentence:
         tmp_sen = Sen(i)
-        if tmp_sen.entity & referer == "entity":
+        if (tmp_sen.entity and referer == 'entity'):
             # storage format:{'id':int, 'word':word_content, 'label':'O'or"entity_type"}
             # split sentence(nltk.word_tokenize()) -> find sentence_id in tag table -> word[pos] : entity[entity_id]
             data.append(tmp_sen.output_entity_training_data(tmp_sen.content, tmp_sen.id))
-        elif tmp_sen.relation & referer == "relation":
+        elif (tmp_sen.relation and referer == 'relation'):
             data.append(tmp_sen.output_relation_training_data(tmp_sen.content, tmp_sen.id))
         else:
             pass
 
     tmp_sen.print_into_file(referer, data)
+    return JsonResponse(success_resp(msg="Export data success!"))
 
 
 class Sen:
@@ -299,11 +300,15 @@ class Sen:
         :return:
         '''
         res = ['O'] * l
+        re = ['O'] * l
         for i in tag_data:
             tmp_pos = self.get_pos(i.get('pos'))
-            entity_id = i.get('type_id')
-            res[tmp_pos[0]:tmp_pos[1]] = queryset2list(EntityTag.objects.get(pk=entity_id))[0].get('name') * (
-                    tmp_pos[1] - tmp_pos[0] + 1)
+            entity_id = i.get('type')
+            type_name =queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
+            count  = tmp_pos[1] - tmp_pos[0] + 1
+            while count :
+                res[tmp_pos[0]+count-1] = type_name
+                count = count - 1
         return res
 
     def output_relation_training_data(self, sen, sen_id):
@@ -316,30 +321,26 @@ class Sen:
         res = []
         count = 0
         tag_data = self.find_relation_tag(sen_id)
-        relation_type = self.generate_printed_relation_type(tag_data, len(splited_sen))
-        for i in splited_sen:
-            count += 1
-            # tmp = {'id': self.id, 'word': i, 'type': entity_type[count - 1]}
-            tmp = self.generate_printed_relation_type(tag_data, splited_sen)
-            res.append(tmp)
+        tmp = self.generate_printed_relation_type(tag_data, splited_sen)
+        res.append(tmp)
         return res
 
-    def generate_printed_relation_type(self, tag_data, l):
+    def generate_printed_relation_type(self, tag_data, splited_sen):
         '''
         通过对生成第三列entity_type需要的数据
         :param tag_data: 符合sentence_id的打标数据
-        :param l: 句子包含的词及标点的个数
+        :param splited_sen: 分割后的句子
         :return:
         '''
         token = splited_sen
         h = {"name": tag_data[0].get('head_entity'), "pos": self.get_pos(tag_data[0].get('head_entity_pos'))}
         t = {"name": tag_data[0].get('tail_entity'), "pos": self.get_pos(tag_data[0].get('tail_entity_pos'))}
-        relation = queryset2list(RelationType.objects.get(pk=tag_data[0].get('type_id')))[0].get('name')
+        relation = queryset2list(RelationType.objects.filter(pk=tag_data[0].get('type')))[0].get('name')
         res = {"token": token, "h": h, "t": t, "relation": relation}
         return res
 
     @staticmethod
-    def get_pos(self, str):
+    def get_pos(str):
         '''
         格式化'pos'
         :param self:
@@ -359,17 +360,19 @@ class Sen:
         :param data: {"id":int,...}
         :return: None
         '''
-        if referer == "entity":
-            fo = open("train_entity.txt", "a+")
+        if referer == 'entity':
+            fo = open("filepath\\train_entity.txt", "a+")
             entity_data = data
-            for i in entity_data:
-                print(i.get('id'), ' ', i.get('word'), ' ', i.get('type'), '\n')
+            for j in entity_data:
+                for i in j:
+                     fo.write(str(i.get('id'))+' '+str(i.get('word'))+' '+str(i.get('type'))+'\n')
+                fo.write('\n')
             fo.close()
-        elif referer == "relation":
-            fo = open("train_entity.json", "a+")
+        elif referer == 'relation':
+            fo = open("filepath\\train_relation.json", "a+")
             relation_data = data
             for i in relation_data:
-                print(i, '\n')
+                fo.write(str(i)+'\n')
             fo.close()
         else:
             print("param error")
