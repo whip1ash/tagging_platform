@@ -10,7 +10,10 @@
 @desc: Some tools
 '''
 
+import re
+
 from django.http import JsonResponse
+from app.normal.models import Sentence
 
 GET_ERROR_CODE = 998
 GET_ERROR_MSG = "This api only support post method!"
@@ -54,4 +57,22 @@ def verify_pos(pos):
 
 def page2offset(page,limit):
     return page*limit
+
+def index2pos(index,sentence_id):
+    try:
+        sentence = Sentence.objects.get(id=sentence_id);
+    except Exception as e:
+        raise e
+
+    content = sentence.content
+    sentence_split = content.split(' ')
+    entity = sentence_split[index]
+    # 妈的，这里先不考虑多个相同的词打不同标记的情况
+    entity = re.findall(r'\w*',entity)[0]
+
+    start = content.find(entity)
+    offset = start + len(entity)
+    return '{},{}'.format(start,offset)
+
+
 

@@ -29,11 +29,10 @@ def server_error(request):
 
 def sentence_index(request):
     '''
-    todo: 查看数据库中现存的句子。页面中发json，取历史记录到前端。
     :param request:
     :return:
     '''
-    # todo: 新建html模板
+
     return render(request,'sentence/index.html')
 
 
@@ -111,11 +110,11 @@ def sentence_doing(request):
 
     try:
         if referer == "entity":
-            tagging_entities = queryset2list(Sentence.objects.filter(entity_tag=False).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.filter(entity_tag=False).all()[offset:offset+limit])
         elif referer == "relation":
-            tagging_entities = queryset2list(Sentence.objects.filter(relation_tag=False).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.filter(relation_tag=False).all()[offset:offset+limit])
         elif referer == "all":
-            tagging_entities = queryset2list(Sentence.objects.exclude(entity_tag=True, relation_tag=True).all()[offset:limit])
+            tagging_entities = queryset2list(Sentence.objects.exclude(entity_tag=True, relation_tag=True).all()[offset:offset+limit])
         else:
             return JsonResponse(fail_resp(code=WRONG_PARAM_CODE,msg="Input a invalid referer"))
     except Exception as e:
@@ -329,7 +328,7 @@ class Sen:
         通过对生成第三列entity_type需要的数据
         :param tag_data: 符合sentence_id的打标数据
         :param splited_sen: 分割后的句子
-        :return:
+        :return
         '''
         token = splited_sen
         h = {"name": tag_data[0].get('head_entity'), "pos": self.get_pos(tag_data[0].get('head_entity_pos'))}
