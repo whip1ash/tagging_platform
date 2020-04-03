@@ -356,7 +356,7 @@ class Sen:
         :return: None
         '''
         if referer == 'entity':
-            fo = open("filepath\\train_entity.txt", "a+")
+            fo = open("/root/school/data/train_data.txt", "a+")
             entity_data = data
             for j in entity_data:
                 for i in j:
