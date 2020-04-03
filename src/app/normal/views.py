@@ -179,16 +179,13 @@ def sentence_get(request):
 
     return JsonResponse(success_resp(msg="Get a sentence success",data=sentence))
 
+
+# 这里删除句子有一个问题，在关系打标中删除该句子，由于关联外键，那么实体打标中与该句话有关的数据会被删除。
 def sentence_delete(request):
     if request.method == "GET":
         return get_method_error()
     body = json.loads(request.body)
     sen_id  = body.get("id")
-
-    try:
-        records = EntityTag.objects.filter(type=sen_id).all()
-    except Exception as e:
-        return JsonResponse(fail_resp(code=DATABASE_ERROR,msg="Get Sentence failed!",data=get_exception(e)))
 
     try:
         Sentence.objects.get(pk=sen_id).delete()
