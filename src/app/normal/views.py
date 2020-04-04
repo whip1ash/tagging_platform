@@ -304,8 +304,13 @@ class Sen:
             entity_id = i.get('type')
             type_name =queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
             count  = tmp_pos[1] - tmp_pos[0] + 1
+            B_label = 1
             while count :
-                res[tmp_pos[0]+count-1] = type_name
+                if B_label and count > 1:
+                    res[tmp_pos[0]+count-1] = 'B-' + type_name
+                    B_label = B_label - 1
+                else:
+                    res[tmp_pos[0]+count-1] = 'I-' + type_name
                 count = count - 1
         return res
 
