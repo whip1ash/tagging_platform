@@ -377,9 +377,9 @@ class Sen:
             df = self.dataframe_initialize()
             df = df.append(data[0],ignore_index=True)
             print(df)
-            df.to_csv("filepath\\train_entity.csv")
+            df.to_csv("/root/school/data/train_entity.csv")
         elif referer == 'relation':
-            fo = open("filepath\\rain_relation.json", "a+")
+            fo = open("/root/school/data/train_relation.json", "a+")
             relation_data = data
             for i in relation_data:
                 fo.write(str(i)+'\n')
