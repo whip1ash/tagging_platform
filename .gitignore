@@ -12,3 +12,4 @@ run.sh
 deploy_settings.sh
 auto_pull.sh
 secretkey.txt
+train_entity.txt

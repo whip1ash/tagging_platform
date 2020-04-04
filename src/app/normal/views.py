@@ -9,6 +9,8 @@ from django.forms.models import model_to_dict
 from app.entity.models import EntityType,EntityTag
 from app.relation.models import RelationType,RelationTag
 
+from pandas import DataFrame
+import pandas as pd
 import json
 import nltk
 import re
@@ -270,6 +272,17 @@ class Sen:
         except e:
             print("No tagged relation in this Sentence")
 
+    @staticmethod
+    def dataframe_initialize():
+        '''
+        初始化DataFrame
+        :return: 初始化好的dataframe，具有有顺序的3列id/word/type
+        '''
+        tmp = pd.DataFrame(columns={'id','word','type'})
+        tmp['id'] = tmp['id'].apply(pd.to_numeric)
+        tmp = tmp[['id','word','type']]
+        return tmp
+
     def output_entity_training_data(self, sen, sen_id):
         '''
         生成输出需要的三列各自的数据
@@ -301,8 +314,13 @@ class Sen:
             entity_id = i.get('type')
             type_name =queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
             count  = tmp_pos[1] - tmp_pos[0] + 1
+            B_label = 1
             while count :
-                res[tmp_pos[0]+count-1] = type_name
+                if B_label and count > 1:
+                    res[tmp_pos[0]+count-1] = 'B-' + type_name
+                    B_label = B_label - 1
+                else:
+                    res[tmp_pos[0]+count-1] = 'I-' + type_name
                 count = count - 1
         return res
 
@@ -356,13 +374,10 @@ class Sen:
         :return: None
         '''
         if referer == 'entity':
-            fo = open("/root/school/data/train_data.txt", "a+")
-            entity_data = data
-            for j in entity_data:
-                for i in j:
-                     fo.write(str(i.get('id'))+' '+str(i.get('word'))+' '+str(i.get('type'))+'\n')
-                fo.write('\n')
-            fo.close()
+            df = self.dataframe_initialize()
+            df = df.append(data[0],ignore_index=True)
+            print(df)
+            df.to_csv("filepath\\train_entity.csv")
         elif referer == 'relation':
             fo = open("filepath\\rain_relation.json", "a+")
             relation_data = data
