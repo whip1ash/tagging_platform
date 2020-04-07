@@ -306,7 +306,7 @@ class Sen:
         通过对生成第三列entity_type需要的数据
         :param tag_data: 符合sentence_id的打标数据
         :param l: 句子包含的词及标点的个数
-        :return:
+        :return: 当前句子的各个词的标记list
         '''
         res = ['O'] * l
         for i in tag_data:
@@ -373,6 +373,12 @@ class Sen:
 
     @staticmethod
     def pos_tans(entity_name,splited_sen):
+        '''
+        将entity_name在此句子中所有位置找到
+        :param entity_name: 需寻找的实体名称
+        :param splited_sen: splited之后的句子
+        :return: entity_name的位置[[0,0],[1,1]]
+        '''
         res = []
         tmp_pos_h = 0
         tmp_pos_t = 0
@@ -403,6 +409,12 @@ class Sen:
 
     @staticmethod
     def tagged(pos,type_dict):
+        '''
+        判断是否已经被打标
+        :param pos: ['0,0']
+        :param type_dict: entity输出第三列
+        :return: bool
+        '''
         for i in pos:
             if type_dict[i[0]:i[1]+1] == ['O'] * (i[1] - i[0] + 1):
                 print(type_dict[i[0]:i[1]+1])
