@@ -294,34 +294,39 @@ class Sen:
         res = []
         count = 0
         tag_data = self.find_entity_tag(sen_id)
-        entity_type = self.generate_printed_entity_type(tag_data, len(splited_sen))
+        entity_type = self.generate_printed_entity_type(tag_data, len(splited_sen), splited_sen)
         for i in splited_sen:
             count += 1
             tmp = {'id': self.id, 'word': i, 'type': entity_type[count - 1]}
             res.append(tmp)
         return res
 
-    def generate_printed_entity_type(self, tag_data, l):
+    def generate_printed_entity_type(self, tag_data, l, splited_sen):
         '''
         通过对生成第三列entity_type需要的数据
         :param tag_data: 符合sentence_id的打标数据
         :param l: 句子包含的词及标点的个数
-        :return:
+        :return: 当前句子的各个词的标记list
         '''
         res = ['O'] * l
         for i in tag_data:
-            tmp_pos = self.get_pos(i.get('pos'))
+            front_pos = self.get_pos(i.get('pos'))
             entity_id = i.get('type')
-            type_name =queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
-            count  = tmp_pos[1] - tmp_pos[0] + 1
-            B_label = 1
-            while count :
-                if B_label and count > 1:
-                    res[tmp_pos[0]+count-1] = 'B-' + type_name
-                    B_label = B_label - 1
-                else:
-                    res[tmp_pos[0]+count-1] = 'I-' + type_name
-                count = count - 1
+            type_name = queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
+            final_pos = self.pos_tans(self.word_split(i.get('entity')), splited_sen)
+            if not self.tagged(final_pos,res):
+                for j in final_pos:
+                    count = 0
+                    B_label = 1
+                    while j[1] - j[0] + 1 - count :
+                        if B_label and j[1] - j[0] + 1 > 1:
+                            res[j[0]] = 'B-' + type_name
+                            B_label = B_label - 1
+                        else:
+                            res[j[0]+count] = 'I-' + type_name
+                        count = count + 1
+            else:
+                pass
         return res
 
     def output_relation_training_data(self, sen, sen_id):
@@ -366,6 +371,57 @@ class Sen:
             res.append(int(i))
         return res
 
+    @staticmethod
+    def pos_tans(entity_name,splited_sen):
+        '''
+        将entity_name在此句子中所有位置找到
+        :param entity_name: 需寻找的实体名称
+        :param splited_sen: splited之后的句子
+        :return: entity_name的位置[[0,0],[1,1]]
+        '''
+        res = []
+        tmp_pos_h = 0
+        tmp_pos_t = 0
+        count = 0
+        flag = 0
+        if len(entity_name) - 1:
+            for index,i in enumerate(splited_sen):
+                if flag:
+                    if i == entity_name[count]:
+                        if count == len(entity_name) - 1:
+                            flag = 0
+                            count = 0
+                            tmp_pos_t = index
+                            res.append([tmp_pos_h,tmp_pos_t])
+                        else:
+                            flag = 1
+                            count = count + 1
+                            tmp_pos_h = index
+                elif i == entity_name[0]:
+                    count = count + 1
+                    flag = 1
+                    tmp_pos_h = index
+        else:
+            for index,i in enumerate(splited_sen):
+                if i == entity_name[0]:
+                    res.append([index,index])
+        return res
+
+    @staticmethod
+    def tagged(pos,type_dict):
+        '''
+        判断是否已经被打标
+        :param pos: ['0,0']
+        :param type_dict: entity输出第三列
+        :return: bool
+        '''
+        for i in pos:
+            if type_dict[i[0]:i[1]+1] == ['O'] * (i[1] - i[0] + 1):
+                print(type_dict[i[0]:i[1]+1])
+                return False
+            print('1')
+        return True
+
     def print_into_file(self, referer, data):
         '''
         输出到文件
@@ -378,6 +434,7 @@ class Sen:
             df = df.append(data[0],ignore_index=True)
             print(df)
             df.to_csv("/root/school/data/train_entity.csv")
+
         elif referer == 'relation':
             fo = open("/root/school/data/train_relation.json", "a+")
             relation_data = data
