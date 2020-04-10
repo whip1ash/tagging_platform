@@ -433,7 +433,7 @@ class Sen:
             df_train = self.dataframe_initialize()
             df_eval = self.dataframe_initialize()
             for index,i in enumerate(data) :
-                if index < 373:
+                if index % 41:
                     df_train = df_train.append(i,ignore_index=True)
                 else:
                     df_eval = df_eval.append(i,ignore_index=True)
