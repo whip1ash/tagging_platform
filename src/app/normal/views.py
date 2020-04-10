@@ -432,9 +432,8 @@ class Sen:
         '''
         if referer == 'entity':
             df = self.dataframe_initialize()
-
-            df = df.append(data[0],ignore_index=True)
-            print(df)
+            for i in data :
+                df = df.append(i,ignore_index=True)
             df.to_csv("/root/school/data/train_entity.csv")
 
         elif referer == 'relation':
