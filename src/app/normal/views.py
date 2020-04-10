@@ -317,15 +317,13 @@ class Sen:
             final_pos = self.pos_tans(self.word_split(i.get('entity')), splited_sen)
             if not self.tagged(final_pos,res):
                 for j in final_pos:
-                    count = 0
-                    B_label = 1
-                    while j[1] - j[0] + 1 - count :
-                        if B_label and j[1] - j[0] + 1 > 1:
+                    count = j[1] - j[0] + 1
+                    while count :
+                        if count == 1:
                             res[j[0]] = 'B-' + type_name
-                            B_label = B_label - 1
                         else:
-                            res[j[0]+count] = 'I-' + type_name
-                        count = count + 1
+                            res[j[0]+count-1] = 'I-' + type_name
+                        count = count - 1
             else:
                 pass
         return res
