@@ -206,6 +206,7 @@ def export(request):
     body = json.loads(request.body)
     referer = body.get("referer")
     tmp_sentence = queryset2list(Sentence.objects.all())
+
     for i in tmp_sentence:
         tmp_sen = Sen(i)
         if (tmp_sen.entity and referer == 'entity'):
@@ -278,9 +279,9 @@ class Sen:
         初始化DataFrame
         :return: 初始化好的dataframe，具有有顺序的3列id/word/type
         '''
-        tmp = pd.DataFrame(columns={'id','word','type'})
-        tmp['id'] = tmp['id'].apply(pd.to_numeric)
-        tmp = tmp[['id','word','type']]
+        tmp = pd.DataFrame(columns={'sentence_id','words','labels'})
+        tmp['sentence_id'] = tmp['sentence_id'].apply(pd.to_numeric)
+        tmp = tmp[['sentence_id','words','labels']]
         return tmp
 
     def output_entity_training_data(self, sen, sen_id):
@@ -297,7 +298,7 @@ class Sen:
         entity_type = self.generate_printed_entity_type(tag_data, len(splited_sen), splited_sen)
         for i in splited_sen:
             count += 1
-            tmp = {'id': self.id, 'word': i, 'type': entity_type[count - 1]}
+            tmp = {'sentence_id': self.id, 'words': i, 'labels': entity_type[count - 1]}
             res.append(tmp)
         return res
 
@@ -429,11 +430,15 @@ class Sen:
         :return: None
         '''
         if referer == 'entity':
-            df = self.dataframe_initialize()
-            for i in data :
-                df = df.append(i,ignore_index=True)
-            df.to_csv("/root/school/data/train_entity.csv")
-
+            df_train = self.dataframe_initialize()
+            df_eval = self.dataframe_initialize()
+            for index,i in enumerate(data) :
+                if index < 373:
+                    df_train = df_train.append(i,ignore_index=True)
+                else:
+                    df_eval = df_eval.append(i,ignore_index=True)
+            df_train.to_csv("/root/school/data/train.csv")
+            df_eval.to_csv("/root/school/data/eval.csv")
         elif referer == 'relation':
             fo = open("/root/school/data/train_relation.json", "a+")
             relation_data = data
