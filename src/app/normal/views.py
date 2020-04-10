@@ -312,7 +312,8 @@ class Sen:
         for i in tag_data:
             front_pos = self.get_pos(i.get('pos'))
             entity_id = i.get('type')
-            type_name = queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
+            tmp_type_name = queryset2list(EntityType.objects.filter(pk=i.get('type')))[0].get('name')
+            type_name = re.split(r'[\u4e00-\u9fa5]+',tmp_type_name)[0]
             final_pos = self.pos_tans(self.word_split(i.get('entity')), splited_sen)
             if not self.tagged(final_pos,res):
                 for j in final_pos:
@@ -417,9 +418,9 @@ class Sen:
         '''
         for i in pos:
             if type_dict[i[0]:i[1]+1] == ['O'] * (i[1] - i[0] + 1):
-                print(type_dict[i[0]:i[1]+1])
+                # print(type_dict[i[0]:i[1]+1])
                 return False
-            print('1')
+            # print('1')
         return True
 
     def print_into_file(self, referer, data):
@@ -431,6 +432,7 @@ class Sen:
         '''
         if referer == 'entity':
             df = self.dataframe_initialize()
+
             df = df.append(data[0],ignore_index=True)
             print(df)
             df.to_csv("/root/school/data/train_entity.csv")
