@@ -437,9 +437,8 @@ class Sen:
                     df_train = df_train.append(i,ignore_index=True)
                 else:
                     df_eval = df_eval.append(i,ignore_index=True)
-            df_train.to_csv("d:\\train.csv")
-            # df_eval.to_csv("/root/school/data/eval.csv")
-            df_eval.to_csv("d:\\eval.csv")
+            df_train.to_csv("/root/school/data/train.csv")
+            df_eval.to_csv("/root/school/data/eval.csv")
         elif referer == 'relation':
             fo = open("/root/school/data/train_relation.json", "a+")
             relation_data = data
