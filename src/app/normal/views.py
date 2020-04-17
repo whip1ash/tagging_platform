@@ -206,7 +206,6 @@ def export(request):
     body = json.loads(request.body)
     referer = body.get("referer")
     tmp_sentence = queryset2list(Sentence.objects.all())
-
     for i in tmp_sentence:
         tmp_sen = Sen(i)
         if (tmp_sen.entity and referer == 'entity'):
@@ -268,7 +267,7 @@ class Sen:
         },...]
         '''
         try:
-            if EntityTag.objects.filter(sentence_id=sen_id) != None:
+            if RelationTag.objects.filter(sentence_id=sen_id) != None:
                 return queryset2list(RelationTag.objects.filter(sentence_id=sen_id))
         except e:
             print("No tagged relation in this Sentence")
@@ -351,8 +350,10 @@ class Sen:
         :return
         '''
         token = splited_sen
-        h = {"name": tag_data[0].get('head_entity'), "pos": self.get_pos(tag_data[0].get('head_entity_pos'))}
-        t = {"name": tag_data[0].get('tail_entity'), "pos": self.get_pos(tag_data[0].get('tail_entity_pos'))}
+        h_name = self.word_split(tag_data[0].get('head_entity'))
+        t_name = self.word_split(tag_data[0].get('tail_entity'))
+        h = {"name": tag_data[0].get('head_entity'), "pos": self.pos_tans(h_name,token)[0]}
+        t = {"name": tag_data[0].get('tail_entity'), "pos": self.pos_tans(t_name,token)[0]}
         relation = queryset2list(RelationType.objects.filter(pk=tag_data[0].get('type')))[0].get('name')
         res = {"token": token, "h": h, "t": t, "relation": relation}
         return res
@@ -372,10 +373,10 @@ class Sen:
         return res
 
     @staticmethod
-    def pos_tans(entity_name,splited_sen):
+    def pos_tans(name,splited_sen):
         '''
         将entity_name在此句子中所有位置找到
-        :param entity_name: 需寻找的实体名称
+        :param name: 需寻找的实体名称
         :param splited_sen: splited之后的句子
         :return: entity_name的位置[[0,0],[1,1]]
         '''
@@ -384,11 +385,11 @@ class Sen:
         tmp_pos_t = 0
         count = 0
         flag = 0
-        if len(entity_name) - 1:
+        if len(name) - 1:
             for index,i in enumerate(splited_sen):
                 if flag:
-                    if i == entity_name[count]:
-                        if count == len(entity_name) - 1:
+                    if i == name[count]:
+                        if count == len(name) - 1:
                             flag = 0
                             count = 0
                             tmp_pos_t = index
@@ -396,14 +397,14 @@ class Sen:
                         else:
                             flag = 1
                             count = count + 1
-                            tmp_pos_h = index
-                elif i == entity_name[0]:
+                            # tmp_pos_h = index
+                elif i == name[0]:
                     count = count + 1
                     flag = 1
                     tmp_pos_h = index
         else:
             for index,i in enumerate(splited_sen):
-                if i == entity_name[0]:
+                if i == name[0]:
                     res.append([index,index])
         return res
 
