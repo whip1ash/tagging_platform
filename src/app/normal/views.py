@@ -355,7 +355,8 @@ class Sen:
         h = {"name": tag_data[0].get('head_entity'), "pos": self.pos_tans(h_name,token)[0]}
         t = {"name": tag_data[0].get('tail_entity'), "pos": self.pos_tans(t_name,token)[0]}
         relation = queryset2list(RelationType.objects.filter(pk=tag_data[0].get('type')))[0].get('name')
-        res = {"token": token, "h": h, "t": t, "relation": relation}
+        relation_name = re.split(r'[\u4e00-\u9fa5]+',relation)[0]
+        res = {"token": token, "h": h, "t": t, "relation": relation_name}
         return res
 
     @staticmethod
@@ -418,10 +419,20 @@ class Sen:
         '''
         for i in pos:
             if type_dict[i[0]:i[1]+1] == ['O'] * (i[1] - i[0] + 1):
-                # print(type_dict[i[0]:i[1]+1])
                 return False
-            # print('1')
         return True
+
+    @staticmethod
+    def generate_rel2id():
+        '''
+        产生rel2id.json文件
+        :return:
+        '''
+        data = {}
+        relation_type = queryset2list(RelationType.objects.all())
+        for index,i in enumerate(relation_type):
+            data[i.get('name')] = index
+        return data
 
     def print_into_file(self, referer, data):
         '''
@@ -443,13 +454,17 @@ class Sen:
         elif referer == 'relation':
             fo_train = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_train.txt", "a+")
             fo_eval = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_val.txt", "a+")
+            fo_rel2id = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_rel2id.json", "a+")
             relation_data = data
+            rel2id = self.generate_rel2id()
+            fo_rel2id.write(str(rel2id).encode('gbk', 'ignore').decode('gbk'))
             for index,i in enumerate(relation_data):
                 if index % 41:
-                    fo_train.write(str(i)+'\n')
+                    fo_train.write(str(i).encode('gbk', 'ignore').decode('gbk')+'\n')
                 else:
-                    fo_eval.write(str(i)+'\n')
+                    fo_eval.write(str(i).encode('gbk', 'ignore').decode('gbk')+'\n')
             fo_train.close()
+            fo_eval.close()
             fo_eval.close()
         else:
             print("param error")
