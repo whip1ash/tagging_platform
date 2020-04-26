@@ -441,11 +441,18 @@ class Sen:
             df_train.to_csv("/root/school/data/train.csv")
             df_eval.to_csv("/root/school/data/eval.csv")
         elif referer == 'relation':
-            fo = open("/root/school/data/train_relation.json", "a+")
+            # fo_train = open("/root/school/data/wiki80_train.txt", "a+")
+            # fo_eval = open("/root/school/data/wiki80_val.txt", "a+")
+            fo_train = open("D:\\wiki80_train.txt", "a+", encoding='utf-8')
+            fo_eval = open("D:\\wiki80_val.txt", "a+", encoding='utf-8')
             relation_data = data
-            for i in relation_data:
-                fo.write(str(i)+'\n')
-            fo.close()
+            for index,i in enumerate(relation_data):
+                if index % 41:
+                    fo_train.write(str(i)+'\n')
+                else:
+                    fo_eval.write(str(i)+'\n')
+            fo_train.close()
+            fo_eval.close()
         else:
             print("param error")
 
