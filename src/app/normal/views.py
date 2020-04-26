@@ -441,8 +441,8 @@ class Sen:
             df_train.to_csv("/root/school/data/train.csv")
             df_eval.to_csv("/root/school/data/eval.csv")
         elif referer == 'relation':
-            fo_train = open("/root/school/data/wiki80_train.txt", "a+")
-            fo_eval = open("/root/school/data/wiki80_val.txt", "a+")
+            fo_train = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_train.txt", "a+")
+            fo_eval = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_val.txt", "a+")
             relation_data = data
             for index,i in enumerate(relation_data):
                 if index % 41:
