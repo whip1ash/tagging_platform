@@ -454,10 +454,10 @@ class Sen:
         elif referer == 'relation':
             fo_train = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_train.txt", "a+")
             fo_eval = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_val.txt", "a+")
-            fo_rel2id = open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_rel2id.json", "a+")
             relation_data = data
             rel2id = self.generate_rel2id()
-            fo_rel2id.write(str(rel2id).encode('gbk', 'ignore').decode('gbk'))
+            with open("/root/school/extractRelation/OpenNRE/benchmark/wiki80/wiki80_rel2id.json", "a+") as fo_rel2id:
+                fo_rel2id.write(json.dumps(rel2id))
             for index,i in enumerate(relation_data):
                 if index % 41:
                     fo_train.write(str(i).encode('gbk', 'ignore').decode('gbk')+'\n')
