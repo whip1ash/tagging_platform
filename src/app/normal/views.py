@@ -460,9 +460,9 @@ class Sen:
                 fo_rel2id.write(json.dumps(rel2id))
             for index,i in enumerate(relation_data):
                 if index % 41:
-                    fo_train.write(str(i).encode('gbk', 'ignore').decode('gbk')+'\n')
+                    fo_train.write(json.dumps(i[0])+'\n')
                 else:
-                    fo_eval.write(str(i).encode('gbk', 'ignore').decode('gbk')+'\n')
+                    fo_eval.write(json.dumps(i[0])+'\n')
             fo_train.close()
             fo_eval.close()
             fo_eval.close()
